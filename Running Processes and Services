@@ -1,3 +1,32 @@
-#Running Processes and Services
+#Running Processes
 #Whether be Incident Response, Forensics or even Malware analysis, running Processes and Services are one of the important artifacts that any investigator would first grab information about. Run the following command in your Powershell window:
-Get-Process | Select-Object * | Export-Csv E:\Get-Process.csv -NoTypeInformation -Encoding UTF8 -Force
+Get-Process | Select-Object * | Export-Csv C:\Get-Process.csv -NoTypeInformation -Encoding UTF8 -Force
+
+
+#To get the all the information about the services, type the following command.
+Get-Service | Select-Object * | Export-Csv C:\Get-Service.csv -NoTypeInformation -Encoding UTF8 -Force
+
+#Filtering based on the status.
+Get-Service | Where-Object {$_.Status -eq ‘Running’}
+
+#Win32_UserAccount class contains information about user accounts.
+Get-WmiObject -Class Win32_UserAccount
+
+#Other than Win32_UserAccount, Get-LocalUser & Get-LocalGroup can also be used to get information about the active users and groups on the system.
+Get-LocalUser | Select Description, Enabled, FullName, UserMayChangePassword, PasswordRequired,LastLogon,Name,SID
+Get-LocalGroup | Select-Object *
+
+
+#Autostart Modules
+#Win32_StartupCommand is a class defined in Get-WmiObject module that provides information about startup applications. It can be used to check persistency on a machine.
+Get-WmiObject -Class Win32_StartupCommand
+Get-WmiObject -Class Win32_StartupCommand | Select-Object PSComputerName,User,__RELPATH,Command,Name | Export-Csv <Path for Csv file> -NoTypeInformation -Force -Encoding UTF8
+
+
+#USB Information
+#USB logs are an important artifact as to know if any malicious incident has been performed via external device or to get a kind of sense that any sensitive file is copied to any external drive.
+#USB logs are maintained at Registry Location:
+HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR
+
+#To get the list of connected USB devices, write the following command in the Powershell Window:
+Get-ItemProperty -Path ‘HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\*\*’ | Select-Object FriendlyName,PSPath
