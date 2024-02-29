@@ -1,0 +1,3 @@
+#Running Processes and Services
+#Whether be Incident Response, Forensics or even Malware analysis, running Processes and Services are one of the important artifacts that any investigator would first grab information about. Run the following command in your Powershell window:
+Get-Process | Select-Object * | Export-Csv E:\Get-Process.csv -NoTypeInformation -Encoding UTF8 -Force
